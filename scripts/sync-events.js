@@ -17,15 +17,19 @@ async function sync() {
 
   const data = await res.json();
 
+  if (!data.records) {
+    throw new Error("Airtable error: " + JSON.stringify(data));
+  }
+
   const events = data.records
-    .filter(r => r.fields.Publier)
+    .filter(r => r.fields?.Publier)
     .map(r => ({
-      imgUrl: r.fields.Image[0].url,
-      titre: r.fields.Titre,
-      description: r.fields.Description || "",
-      date: r.fields.Date,
-      heure: r.fields.Heure || "",
-      lieu: r.fields.Lieu || ""
+      imgUrl: r.fields?.Image?.[0]?.url || null,
+      titre: r.fields?.Titre || "",
+      description: r.fields?.Description || "",
+      date: r.fields?.Date || "",
+      heure: r.fields?.Heure || "",
+      lieu: r.fields?.Lieu || ""
     }));
 
   fs.writeFileSync(
@@ -33,7 +37,7 @@ async function sync() {
     JSON.stringify(events, null, 2)
   );
 
-  console.log("events.json mis à jour");
+  console.log("events.json mis à jour :", events.length);
 }
 
 sync();
