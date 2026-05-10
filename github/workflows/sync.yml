@@ -1,0 +1,36 @@
+name: Sync Airtable Events
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # chaque lundi 3h
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install node-fetch dotenv
+
+      - name: Run sync script
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          BASE_ID: ${{ secrets.BASE_ID }}
+        run: node scripts/sync-events.js
+
+      - name: Commit changes
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "bot@github.com"
+          git add site/events.json
+          git commit -m "update events" || echo "no changes"
+          git push
