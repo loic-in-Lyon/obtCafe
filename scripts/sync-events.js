@@ -1,5 +1,6 @@
 const fs = require("fs");
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
+require("dotenv").config();
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const BASE_ID = process.env.BASE_ID;
