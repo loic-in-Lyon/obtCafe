@@ -33,7 +33,7 @@ async function sync() {
     }));
 
   fs.writeFileSync(
-    "site/events.json",
+    "docs/events.json",
     JSON.stringify(events, null, 2)
   );
 

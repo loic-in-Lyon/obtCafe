@@ -31,6 +31,6 @@ jobs:
         run: |
           git config user.name "sync-bot"
           git config user.email "bot@github.com"
-          git add site/events.json
+          git add docs/events.json
           git commit -m "update events" || echo "no changes"
           git push
